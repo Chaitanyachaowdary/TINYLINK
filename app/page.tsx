@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Dashboard() {
   const [url, setUrl] = useState("");
@@ -30,7 +31,7 @@ export default function Dashboard() {
     fetchLinks();
   }, []);
 
-  // Create new short link
+  // Create link
   async function handleSubmit(e: any) {
     e.preventDefault();
     setLoading(true);
@@ -67,10 +68,9 @@ export default function Dashboard() {
       <h1 className="text-3xl font-bold mb-6 text-center">TinyLink Dashboard</h1>
 
       {/* Add Link Form */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-5 rounded-lg shadow mb-8"
-      >
+      <form onSubmit={handleSubmit} className="bg-white p-5 rounded-lg shadow mb-8">
+        
+        {/* Long URL */}
         <div className="mb-4">
           <label className="block mb-1 font-semibold">Long URL</label>
           <input
@@ -79,24 +79,25 @@ export default function Dashboard() {
             onChange={(e) => setUrl(e.target.value)}
             required
             placeholder="https://example.com"
+            autoComplete="off"
             className="w-full border px-3 py-2 rounded"
           />
         </div>
 
+        {/* Custom Code */}
         <div className="mb-4">
           <label className="block mb-1 font-semibold">Custom Code (optional)</label>
           <input
             type="text"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={(e) => setCode(e.target.value.trim())}
             placeholder="mydocs"
+            autoComplete="off"
             className="w-full border px-3 py-2 rounded"
           />
         </div>
 
-        {error && (
-          <p className="text-red-600 font-semibold mb-2">{error}</p>
-        )}
+        {error && <p className="text-red-600 font-semibold mb-2">{error}</p>}
 
         <button
           disabled={loading}
@@ -126,6 +127,7 @@ export default function Dashboard() {
                 <td className="p-3">{link.click_count}</td>
 
                 <td className="p-3 space-x-3">
+                  
                   {/* Copy Button */}
                   <button
                     onClick={() =>
@@ -139,9 +141,12 @@ export default function Dashboard() {
                   </button>
 
                   {/* Stats Page */}
-                  <a href={`/stats/${link.code}`}>
+                  <Link
+                    href={`/code/${link.code}`}
+                    className="text-green-600 hover:underline"
+                  >
                     Stats
-                  </a>
+                  </Link>
 
                   {/* Delete */}
                   <button
