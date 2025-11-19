@@ -5,3 +5,4 @@ export function GET() {
     uptime: process.uptime(),
   });
 }
+
